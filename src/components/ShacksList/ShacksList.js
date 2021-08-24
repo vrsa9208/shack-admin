@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ShacksList = () => {
+const ShacksList = ({ data, selected, onItemClick }) => {
   const classes = useStyles();
 
   return (
@@ -32,18 +32,19 @@ const ShacksList = () => {
       }
       className={classes.root}
     >
-      <ListItem button selected>
-        <ListItemIcon>
-          <HouseIcon style={{ color: "red" }} />
-        </ListItemIcon>
-        <ListItemText primary="Mayo" />
-      </ListItem>
-      <ListItem button>
-        <ListItemIcon>
-          <HouseIcon style={{ color: "green" }} />
-        </ListItemIcon>
-        <ListItemText primary="Mestiza" />
-      </ListItem>
+      {data.map((shack) => (
+        <ListItem
+          onClick={() => onItemClick(shack)}
+          button
+          key={shack.id}
+          selected={selected === shack.id}
+        >
+          <ListItemIcon>
+            <HouseIcon style={{ color: shack.color }} />
+          </ListItemIcon>
+          <ListItemText primary={shack.name} />
+        </ListItem>
+      ))}
     </List>
   );
 };

@@ -4,6 +4,7 @@ import {
   SET_SHACKS_IS_LOADING,
 } from "./actionTypes";
 import { getServerClient } from "../../utils/networkUtils";
+import { mapShacksResponse } from "../../utils/shacksUtils";
 
 export const setShacksData = (data) => ({
   type: SET_SHACKS_DATA,
@@ -26,7 +27,8 @@ export const fetchShacks = () => (dispatch) => {
   getServerClient()
     .get("shacks.json")
     .then((response) => {
-      console.log(response);
+      let data = mapShacksResponse(response.data);
+      dispatch(setShacksData(data));
     })
     .catch((error) => dispatch(setShacksError(error)))
     .then(() => dispatch(setShacksIsLoading(true)));

@@ -1,17 +1,20 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 import { fetchShacks } from "../../redux/actions/shacksActions";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
+import Alert from "@material-ui/lab/Alert";
 import ShacksList from "../../components/ShacksList/ShacksList";
 import FullCalendar from "@fullcalendar/react"; // must go before plugins
 import dayGridPlugin from "@fullcalendar/daygrid"; // a plugin!
 import interactionPlugin from "@fullcalendar/interaction";
+import { Container } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
+    height: "83vh",
   },
   paper: {
     padding: theme.spacing(2),
@@ -22,10 +25,16 @@ const useStyles = makeStyles((theme) => ({
 
 const Calendar = ({ shacks, fetchShacks }) => {
   const classes = useStyles();
+  const [selectedShack, setSelectedShack] = useState("");
 
   useEffect(() => {
     fetchShacks();
   }, [fetchShacks]);
+
+  const handleOnItemClick = (item) => {
+    setSelectedShack(item.id);
+  };
+
   const events = [
     {
       title: "Orlando Santiago",
@@ -42,10 +51,20 @@ const Calendar = ({ shacks, fetchShacks }) => {
   ];
 
   return (
-    <div className={classes.root}>
-      <Grid container spacing={3} style={{ height: "90vh" }}>
+    <Container maxWidth="lg" className={classes.root}>
+      <Grid container spacing={3} style={{ height: "100%" }}>
+        <Grid item xs={12}>
+          <Alert severity="info">
+            Para agendar una cita, selecciona una cabaña y presiona la fecha de
+            inicio en el calendario
+          </Alert>
+        </Grid>
         <Grid item xs={2}>
-          <ShacksList />
+          <ShacksList
+            data={shacks}
+            selected={selectedShack}
+            onItemClick={handleOnItemClick}
+          />
         </Grid>
         <Grid item xs={10} style={{ height: "100%" }}>
           <Paper className={classes.paper} style={{ height: "100%" }}>
@@ -61,7 +80,7 @@ const Calendar = ({ shacks, fetchShacks }) => {
           </Paper>
         </Grid>
       </Grid>
-    </div>
+    </Container>
   );
 };
 
