@@ -37,7 +37,7 @@ const ShacksList = ({ data, selected, onItemClick }) => {
           onClick={() => onItemClick(shack)}
           button
           key={shack.id}
-          selected={selected === shack.id}
+          selected={selected?.id === shack.id}
         >
           <ListItemIcon>
             <HouseIcon style={{ color: shack.color }} />

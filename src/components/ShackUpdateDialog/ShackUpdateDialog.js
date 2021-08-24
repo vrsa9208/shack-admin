@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -17,7 +17,23 @@ import {
 import MomentUtils from "@date-io/moment";
 import moment from "moment";
 
-const ShackUpdateDialog = () => {
+const ShackUpdateDialog = ({ onCancelClick, selectedShack, calendarEvent }) => {
+  const [startDate, setStartDate] = useState(calendarEvent?.date ?? new Date());
+  const [endDate, setEndDate] = useState(
+    moment(calendarEvent?.date ?? new Date())
+      .add(1, "d")
+      .toDate()
+  );
+
+  const handleOnStartDateInputChange = (date) => {
+    setStartDate(date._d);
+  };
+
+  const handleOnEndDateInputChange = (date) => {
+    setEndDate(date._d);
+  };
+
+  console.log("calendarEvent :>> ", calendarEvent);
   return (
     <MuiPickersUtilsProvider libInstance={moment} utils={MomentUtils}>
       <Dialog open={true} aria-labelledby="form-dialog-title">
@@ -27,28 +43,23 @@ const ShackUpdateDialog = () => {
             Por favor, completa el siguiente formulario para reservar la cabaña
           </DialogContentText>
           <FormControl fullWidth variant="outlined" style={{ marginTop: 16 }}>
-            <InputLabel htmlFor="outlined-adornment-amount">Cabaña</InputLabel>
+            <InputLabel htmlFor="shack-name">Cabaña</InputLabel>
             <OutlinedInput
-              value="Mestiza"
-              id="outlined-adornment-amount"
+              value={selectedShack?.name}
+              id="shack-name"
               labelWidth={90}
             />
           </FormControl>
-          <Grid container xs={12} style={{ marginTop: 16 }}>
+          <Grid item container xs={12} style={{ marginTop: 16 }}>
             <Grid item xs={6}>
               <KeyboardDatePicker
                 disableToolbar
                 format="yyyy-MM-DD"
                 margin="normal"
                 inputVariant="outlined"
-                id="date-picker-inline"
                 label="Fecha inicio"
-                onChange={(event) => {
-                  console.log(event);
-                }}
-                KeyboardButtonProps={{
-                  "aria-label": "change date",
-                }}
+                value={startDate}
+                onChange={handleOnStartDateInputChange}
                 style={{ paddingRight: 8 }}
               />
             </Grid>
@@ -58,77 +69,17 @@ const ShackUpdateDialog = () => {
                 format="yyyy-MM-DD"
                 margin="normal"
                 inputVariant="outlined"
-                id="date-picker-inline"
                 label="Fecha fin"
-                onChange={(event) => {
-                  console.log(event);
-                }}
-                KeyboardButtonProps={{
-                  "aria-label": "change date",
-                }}
-                style={{ paddingRight: 8 }}
+                value={endDate}
+                onChange={handleOnEndDateInputChange}
               />
-            </Grid>
-          </Grid>
-          <FormControl fullWidth variant="outlined" style={{ marginTop: 16 }}>
-            <InputLabel htmlFor="outlined-adornment-amount">
-              Nombre(s)
-            </InputLabel>
-            <OutlinedInput id="outlined-adornment-amount" labelWidth={90} />
-          </FormControl>
-
-          <FormControl fullWidth variant="outlined" style={{ marginTop: 16 }}>
-            <InputLabel htmlFor="outlined-adornment-amount">
-              Apellidos
-            </InputLabel>
-            <OutlinedInput id="outlined-adornment-amount" labelWidth={90} />
-          </FormControl>
-
-          <Grid container xs={12} style={{ marginTop: 16 }}>
-            <Grid item xs={6}>
-              <FormControl
-                fullWidth
-                variant="outlined"
-                style={{ marginTop: 16, paddingRight: 8 }}
-              >
-                <InputLabel htmlFor="outlined-adornment-amount">
-                  Pago inicial
-                </InputLabel>
-                <OutlinedInput
-                  id="outlined-adornment-amount"
-                  startAdornment={
-                    <InputAdornment position="start">$</InputAdornment>
-                  }
-                  labelWidth={90}
-                />
-              </FormControl>
-            </Grid>
-            <Grid item xs={6}>
-              <FormControl
-                fullWidth
-                variant="outlined"
-                style={{ marginTop: 16 }}
-              >
-                <InputLabel htmlFor="outlined-adornment-amount">
-                  Pago restante
-                </InputLabel>
-                <OutlinedInput
-                  value={1500}
-                  readOnly={true}
-                  id="outlined-adornment-amount"
-                  startAdornment={
-                    <InputAdornment position="start">$</InputAdornment>
-                  }
-                  labelWidth={120}
-                />
-              </FormControl>
             </Grid>
           </Grid>
         </DialogContent>
         <DialogActions
           style={{ paddingTop: 8, paddingBottom: 16, paddingInline: 25 }}
         >
-          <Button color="secondary" variant="outlined">
+          <Button onClick={onCancelClick} color="secondary" variant="outlined">
             Cancelar
           </Button>
           <Button color="primary" variant="outlined">

@@ -26,14 +26,34 @@ const useStyles = makeStyles((theme) => ({
 
 const Calendar = ({ shacks, fetchShacks }) => {
   const classes = useStyles();
-  const [selectedShack, setSelectedShack] = useState("");
+  const [selectedShack, setSelectedShack] = useState({
+    id: "mayo",
+    color: "green",
+    name: "Mayo",
+    price: 1200,
+  });
+  const [updateDialog, setUpdateDialog] = useState({ open: false });
 
   useEffect(() => {
     fetchShacks();
   }, [fetchShacks]);
 
   const handleOnItemClick = (item) => {
-    setSelectedShack(item.id);
+    console.log("item :>> ", item);
+    setSelectedShack(item);
+  };
+
+  const handleOnUpdateDialogCancelClick = () => {
+    setUpdateDialog({ open: false });
+  };
+
+  const handleOnCalendarDateClick = (calendarEvent) => {
+    if (!selectedShack) {
+      alert("Selecciona una cabaña");
+      return;
+    }
+
+    setUpdateDialog({ open: true, selectedShack, calendarEvent });
   };
 
   const events = [
@@ -53,7 +73,12 @@ const Calendar = ({ shacks, fetchShacks }) => {
 
   return (
     <>
-      <ShackUpdateDialog />
+      {updateDialog.open && (
+        <ShackUpdateDialog
+          onCancelClick={handleOnUpdateDialogCancelClick}
+          {...updateDialog}
+        />
+      )}
       <Container maxWidth="lg" className={classes.root}>
         <Grid container spacing={3} style={{ height: "100%" }}>
           <Grid item xs={12}>
@@ -77,7 +102,7 @@ const Calendar = ({ shacks, fetchShacks }) => {
                 height="100%"
                 events={events}
                 locale="es-mx"
-                dateClick={(info) => console.log("Hello", info)}
+                dateClick={handleOnCalendarDateClick}
                 eventClick={(info) => alert("No me toques, depravado")}
               />
             </Paper>
