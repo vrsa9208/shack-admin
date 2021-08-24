@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 import { fetchShacks } from "../../redux/actions/shacksActions";
 import { fetchReservations } from "../../redux/actions/reservationsActions";
+import { mapReservationToEvent } from "../../utils/reservationsUtils";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import Alert from "@material-ui/lab/Alert";
@@ -42,7 +43,6 @@ const Calendar = ({ shacks, reservations, fetchShacks, fetchReservations }) => {
   }, [fetchShacks, fetchReservations]);
 
   const handleOnItemClick = (item) => {
-    console.log("item :>> ", item);
     setSelectedShack(item);
   };
 
@@ -59,20 +59,13 @@ const Calendar = ({ shacks, reservations, fetchShacks, fetchReservations }) => {
     setUpdateDialog({ open: true, selectedShack, calendarEvent });
   };
 
-  const events = [
-    {
-      title: "Orlando Santiago",
-      start: "2021-08-23",
-      end: "2021-09-01",
-      color: "green",
-    },
-    {
-      title: "Ernesto Santiago",
-      start: "2021-08-25",
-      end: "2021-08-31",
-      color: "red",
-    },
-  ];
+  const filteredReservations = reservations.filter(
+    (reservation) => reservation.shackId === selectedShack?.id
+  );
+
+  const events = filteredReservations.map((reservation) =>
+    mapReservationToEvent(reservation, shacks)
+  );
 
   return (
     <>

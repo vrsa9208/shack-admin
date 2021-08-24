@@ -4,6 +4,7 @@ import {
   SET_RESERVATIONS_IS_LOADING,
 } from "./actionTypes";
 import { getServerClient } from "../../utils/networkUtils";
+import { mapCollectionResponse } from "../../utils/firebaseUtils";
 
 export const setReservationsData = (data) => ({
   type: SET_RESERVATIONS_DATA,
@@ -26,9 +27,8 @@ export const fetchReservations = () => (dispatch) => {
   getServerClient()
     .get("reservations.json")
     .then((response) => {
-      /*let data = mapReservationsResponse(response.data);
-      dispatch(setReservationsData(data));*/
-      console.log("response :>> ", response);
+      let data = mapCollectionResponse(response.data);
+      dispatch(setReservationsData(data));
     })
     .catch((error) => dispatch(setReservationsError(error)))
     .then(() => dispatch(setReservationsIsLoading(false)));

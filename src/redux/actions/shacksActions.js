@@ -4,7 +4,7 @@ import {
   SET_SHACKS_IS_LOADING,
 } from "./actionTypes";
 import { getServerClient } from "../../utils/networkUtils";
-import { mapShacksResponse } from "../../utils/shacksUtils";
+import { mapCollectionResponse } from "../../utils/firebaseUtils";
 
 export const setShacksData = (data) => ({
   type: SET_SHACKS_DATA,
@@ -27,7 +27,7 @@ export const fetchShacks = () => (dispatch) => {
   getServerClient()
     .get("shacks.json")
     .then((response) => {
-      let data = mapShacksResponse(response.data);
+      let data = mapCollectionResponse(response.data);
       dispatch(setShacksData(data));
     })
     .catch((error) => dispatch(setShacksError(error)))
