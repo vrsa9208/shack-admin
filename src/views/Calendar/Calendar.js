@@ -10,6 +10,7 @@ import FullCalendar from "@fullcalendar/react"; // must go before plugins
 import dayGridPlugin from "@fullcalendar/daygrid"; // a plugin!
 import interactionPlugin from "@fullcalendar/interaction";
 import { Container } from "@material-ui/core";
+import ShackUpdateDialog from "../../components/ShackUpdateDialog/ShackUpdateDialog";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -51,36 +52,39 @@ const Calendar = ({ shacks, fetchShacks }) => {
   ];
 
   return (
-    <Container maxWidth="lg" className={classes.root}>
-      <Grid container spacing={3} style={{ height: "100%" }}>
-        <Grid item xs={12}>
-          <Alert severity="info">
-            Para agendar una cita, selecciona una cabaña y presiona la fecha de
-            inicio en el calendario
-          </Alert>
-        </Grid>
-        <Grid item xs={2}>
-          <ShacksList
-            data={shacks}
-            selected={selectedShack}
-            onItemClick={handleOnItemClick}
-          />
-        </Grid>
-        <Grid item xs={10} style={{ height: "100%" }}>
-          <Paper className={classes.paper} style={{ height: "100%" }}>
-            <FullCalendar
-              plugins={[dayGridPlugin, interactionPlugin]}
-              initialView="dayGridMonth"
-              height="100%"
-              events={events}
-              locale="es-mx"
-              dateClick={(info) => console.log("Hello", info)}
-              eventClick={(info) => alert("No me toques, depravado")}
+    <>
+      <ShackUpdateDialog />
+      <Container maxWidth="lg" className={classes.root}>
+        <Grid container spacing={3} style={{ height: "100%" }}>
+          <Grid item xs={12}>
+            <Alert severity="info">
+              Para agendar una cita, selecciona una cabaña y presiona la fecha
+              de inicio en el calendario
+            </Alert>
+          </Grid>
+          <Grid item xs={2}>
+            <ShacksList
+              data={shacks}
+              selected={selectedShack}
+              onItemClick={handleOnItemClick}
             />
-          </Paper>
+          </Grid>
+          <Grid item xs={10} style={{ height: "100%" }}>
+            <Paper className={classes.paper} style={{ height: "100%" }}>
+              <FullCalendar
+                plugins={[dayGridPlugin, interactionPlugin]}
+                initialView="dayGridMonth"
+                height="100%"
+                events={events}
+                locale="es-mx"
+                dateClick={(info) => console.log("Hello", info)}
+                eventClick={(info) => alert("No me toques, depravado")}
+              />
+            </Paper>
+          </Grid>
         </Grid>
-      </Grid>
-    </Container>
+      </Container>
+    </>
   );
 };
 
