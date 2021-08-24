@@ -18,12 +18,10 @@ import MomentUtils from "@date-io/moment";
 import moment from "moment";
 
 const ShackUpdateDialog = ({ onCancelClick, selectedShack, calendarEvent }) => {
-  const [startDate, setStartDate] = useState(calendarEvent?.date ?? new Date());
-  const [endDate, setEndDate] = useState(
-    moment(calendarEvent?.date ?? new Date())
-      .add(1, "d")
-      .toDate()
+  const [startDate, setStartDate] = useState(
+    calendarEvent?.start ?? new Date()
   );
+  const [endDate, setEndDate] = useState(calendarEvent?.end ?? new Date());
 
   const handleOnStartDateInputChange = (date) => {
     setStartDate(date._d);

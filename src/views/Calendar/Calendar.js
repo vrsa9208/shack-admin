@@ -11,6 +11,7 @@ import dayGridPlugin from "@fullcalendar/daygrid"; // a plugin!
 import interactionPlugin from "@fullcalendar/interaction";
 import { Container } from "@material-ui/core";
 import ShackUpdateDialog from "../../components/ShackUpdateDialog/ShackUpdateDialog";
+import moment from "moment";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -47,7 +48,7 @@ const Calendar = ({ shacks, fetchShacks }) => {
     setUpdateDialog({ open: false });
   };
 
-  const handleOnCalendarDateClick = (calendarEvent) => {
+  const handleOnCalendarSelect = (calendarEvent) => {
     if (!selectedShack) {
       alert("Selecciona una cabaña");
       return;
@@ -102,8 +103,12 @@ const Calendar = ({ shacks, fetchShacks }) => {
                 height="100%"
                 events={events}
                 locale="es-mx"
-                dateClick={handleOnCalendarDateClick}
+                selectable
                 eventClick={(info) => alert("No me toques, depravado")}
+                select={handleOnCalendarSelect}
+                selectConstraint={{
+                  start: moment(new Date()).subtract(1, "d").toDate(),
+                }}
               />
             </Paper>
           </Grid>
