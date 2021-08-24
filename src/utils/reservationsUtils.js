@@ -23,7 +23,9 @@ export const isValidEvent = (proposedEvent, currentEvents) => {
       (proposedStartDate.diff(currentEventStartDate) >= 0 &&
         proposedStartDate.diff(currentEventEndDate) < 0) ||
       (proposedEndDate.diff(currentEventStartDate) > 0 &&
-        proposedEndDate.diff(currentEventEndDate) <= 0)
+        proposedEndDate.diff(currentEventEndDate) <= 0) ||
+      (proposedStartDate.diff(currentEventStartDate) < 0 &&
+        proposedEndDate.diff(currentEventEndDate) > 0)
     ) {
       return false;
     }
