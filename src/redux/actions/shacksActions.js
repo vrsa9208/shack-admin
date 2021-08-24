@@ -31,5 +31,5 @@ export const fetchShacks = () => (dispatch) => {
       dispatch(setShacksData(data));
     })
     .catch((error) => dispatch(setShacksError(error)))
-    .then(() => dispatch(setShacksIsLoading(true)));
+    .then(() => dispatch(setShacksIsLoading(false)));
 };

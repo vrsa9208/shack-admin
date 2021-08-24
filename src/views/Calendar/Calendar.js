@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 import { fetchShacks } from "../../redux/actions/shacksActions";
+import { fetchReservations } from "../../redux/actions/reservationsActions";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import Alert from "@material-ui/lab/Alert";
@@ -25,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Calendar = ({ shacks, fetchShacks }) => {
+const Calendar = ({ shacks, reservations, fetchShacks, fetchReservations }) => {
   const classes = useStyles();
   const [selectedShack, setSelectedShack] = useState({
     id: "mayo",
@@ -37,7 +38,8 @@ const Calendar = ({ shacks, fetchShacks }) => {
 
   useEffect(() => {
     fetchShacks();
-  }, [fetchShacks]);
+    fetchReservations();
+  }, [fetchShacks, fetchReservations]);
 
   const handleOnItemClick = (item) => {
     console.log("item :>> ", item);
@@ -120,8 +122,9 @@ const Calendar = ({ shacks, fetchShacks }) => {
 
 const mapStateToProps = (state) => ({
   shacks: state.shacks.data,
+  reservations: state.reservations.data,
 });
 
-const mapDispatchToProps = { fetchShacks };
+const mapDispatchToProps = { fetchShacks, fetchReservations };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Calendar);
