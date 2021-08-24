@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { connect } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
+import { fetchShacks } from "../../redux/actions/shacksActions";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import ShacksList from "../../components/ShacksList/ShacksList";
@@ -18,8 +20,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Calendar = () => {
+const Calendar = ({ shacks, fetchShacks }) => {
   const classes = useStyles();
+
+  useEffect(() => {
+    fetchShacks();
+  }, [fetchShacks]);
   const events = [
     {
       title: "Orlando Santiago",
@@ -59,4 +65,10 @@ const Calendar = () => {
   );
 };
 
-export default Calendar;
+const mapStateToProps = (state) => ({
+  shacks: state.shacks.data,
+});
+
+const mapDispatchToProps = { fetchShacks };
+
+export default connect(mapStateToProps, mapDispatchToProps)(Calendar);

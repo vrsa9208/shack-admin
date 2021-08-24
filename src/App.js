@@ -1,5 +1,4 @@
 import React from "react";
-import { connect } from "react-redux";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { HashRouter, Route, Switch } from "react-router-dom";
 import MainLayout from "./components/MainLayout/MainLayout";
@@ -28,8 +27,4 @@ const App = ({ user }) => {
   );
 };
 
-const mapStateToProps = (state) => ({
-  user: state.user.data,
-});
-
-export default connect(mapStateToProps)(App);
+export default App;

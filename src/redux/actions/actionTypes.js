@@ -1,1 +1,5 @@
 export const RESET = "RESET";
+
+export const SET_SHACKS_DATA = "SET_SHACKS_DATA";
+export const SET_SHACKS_IS_LOADING = "SET_SHACKS_IS_LOADING";
+export const SET_SHACKS_ERROR = "SET_SHACKS_ERROR";

@@ -20,11 +20,6 @@ const useStyles = makeStyles((theme) => ({
 
 const ShacksList = () => {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(true);
-
-  const handleClick = () => {
-    setOpen(!open);
-  };
 
   return (
     <List
