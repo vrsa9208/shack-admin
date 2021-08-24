@@ -6,7 +6,10 @@ import {
   fetchReservations,
   postReservation,
 } from "../../redux/actions/reservationsActions";
-import { mapReservationToEvent } from "../../utils/reservationsUtils";
+import {
+  mapReservationToEvent,
+  isValidEvent,
+} from "../../utils/reservationsUtils";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import Alert from "@material-ui/lab/Alert";
@@ -57,6 +60,11 @@ const Calendar = ({
   const handleOnCalendarSelect = (calendarEvent) => {
     if (!selectedShack) {
       alert("Selecciona una cabaña");
+      return;
+    }
+
+    if (!isValidEvent(calendarEvent, events)) {
+      alert("Las fechas NO son válidas. Favor de revisar");
       return;
     }
 
