@@ -2,7 +2,10 @@ import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 import { fetchShacks } from "../../redux/actions/shacksActions";
-import { fetchReservations } from "../../redux/actions/reservationsActions";
+import {
+  fetchReservations,
+  postReservation,
+} from "../../redux/actions/reservationsActions";
 import { mapReservationToEvent } from "../../utils/reservationsUtils";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
@@ -27,14 +30,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Calendar = ({ shacks, reservations, fetchShacks, fetchReservations }) => {
+const Calendar = ({
+  shacks,
+  reservations,
+  fetchShacks,
+  fetchReservations,
+  postReservation,
+}) => {
   const classes = useStyles();
-  const [selectedShack, setSelectedShack] = useState({
-    id: "mayo",
-    color: "green",
-    name: "Mayo",
-    price: 1200,
-  });
+  const [selectedShack, setSelectedShack] = useState(null);
   const [updateDialog, setUpdateDialog] = useState({ open: false });
 
   useEffect(() => {
@@ -56,7 +60,17 @@ const Calendar = ({ shacks, reservations, fetchShacks, fetchReservations }) => {
       return;
     }
 
-    setUpdateDialog({ open: true, selectedShack, calendarEvent });
+    setUpdateDialog({
+      open: true,
+      selectedShack,
+      calendarEvent,
+      onSubmitClick: startPostReservation,
+    });
+  };
+
+  const startPostReservation = (reservation) => {
+    setUpdateDialog({ open: false });
+    postReservation(reservation);
   };
 
   const filteredReservations = reservations.filter(
@@ -118,6 +132,6 @@ const mapStateToProps = (state) => ({
   reservations: state.reservations.data,
 });
 
-const mapDispatchToProps = { fetchShacks, fetchReservations };
+const mapDispatchToProps = { fetchShacks, fetchReservations, postReservation };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Calendar);

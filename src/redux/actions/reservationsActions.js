@@ -33,3 +33,15 @@ export const fetchReservations = () => (dispatch) => {
     .catch((error) => dispatch(setReservationsError(error)))
     .then(() => dispatch(setReservationsIsLoading(false)));
 };
+
+export const postReservation = (reservation) => (dispatch) => {
+  dispatch(setReservationsIsLoading(true));
+
+  getServerClient()
+    .post("reservations.json", reservation)
+    .then((response) => {
+      dispatch(fetchReservations());
+    })
+    .catch((error) => dispatch(setReservationsError(error)))
+    .then(() => dispatch(setReservationsIsLoading(false)));
+};

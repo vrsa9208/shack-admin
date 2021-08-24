@@ -5,6 +5,6 @@ export const mapReservationToEvent = (reservation, shacks = []) => {
     title: reservation.name,
     start: reservation.startDate,
     end: reservation.endDate,
-    color: reservedShack.color,
+    color: reservedShack?.color,
   };
 };

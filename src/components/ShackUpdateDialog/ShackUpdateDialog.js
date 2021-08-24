@@ -17,7 +17,12 @@ import {
 import MomentUtils from "@date-io/moment";
 import moment from "moment";
 
-const ShackUpdateDialog = ({ onCancelClick, selectedShack, calendarEvent }) => {
+const ShackUpdateDialog = ({
+  onCancelClick,
+  onSubmitClick,
+  selectedShack,
+  calendarEvent,
+}) => {
   const [startDate, setStartDate] = useState(
     calendarEvent?.start ?? new Date()
   );
@@ -27,7 +32,8 @@ const ShackUpdateDialog = ({ onCancelClick, selectedShack, calendarEvent }) => {
   const [lastname, setLastname] = useState("");
 
   const days = moment(endDate).diff(moment(startDate), "d");
-  const leftPayment = days * selectedShack?.price - initialPayment;
+  const total = days * selectedShack?.price;
+  const leftPayment = total - initialPayment;
 
   const handleOnStartDateInputChange = (date) => {
     setStartDate(date._d);
@@ -38,7 +44,11 @@ const ShackUpdateDialog = ({ onCancelClick, selectedShack, calendarEvent }) => {
   };
 
   const handleOnInitialPaymentChange = (event) => {
-    setInitialPayment(event.target.value);
+    if (event.target.value.length > 0) {
+      setInitialPayment(parseFloat(event.target.value));
+    } else {
+      setInitialPayment(0);
+    }
   };
 
   const handleOnNameChange = (event) => {
@@ -47,6 +57,22 @@ const ShackUpdateDialog = ({ onCancelClick, selectedShack, calendarEvent }) => {
 
   const handleOnLastnameChange = (event) => {
     setLastname(event.target.value);
+  };
+
+  const handleOnSubmitClick = () => {
+    let reservation = {
+      shackId: selectedShack.id,
+      name,
+      lastname,
+      total,
+      startDate: moment(startDate).format("yyyy-MM-DD"),
+      endDate: moment(endDate).format("yyyy-MM-DD"),
+      initialPayment,
+      creationDate: new Date(),
+      status: "Open",
+    };
+
+    onSubmitClick(reservation);
   };
 
   return (
@@ -158,7 +184,11 @@ const ShackUpdateDialog = ({ onCancelClick, selectedShack, calendarEvent }) => {
           <Button onClick={onCancelClick} color="secondary" variant="outlined">
             Cancelar
           </Button>
-          <Button color="primary" variant="outlined">
+          <Button
+            onClick={handleOnSubmitClick}
+            color="primary"
+            variant="outlined"
+          >
             Reservar
           </Button>
         </DialogActions>
