@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import { HashRouter, Redirect, Route, Switch } from "react-router-dom";
+import { HashRouter, Route, Switch } from "react-router-dom";
 import MainLayout from "./components/MainLayout/MainLayout";
 import Calendar from "./views/Calendar/Calendar";
 

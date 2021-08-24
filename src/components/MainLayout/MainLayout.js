@@ -77,7 +77,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const PersistentDrawerLeft = (props) => {
+const MainLayout = (props) => {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
@@ -110,7 +110,7 @@ const PersistentDrawerLeft = (props) => {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap>
-            Persistent drawer
+            Administrador de Cabañas
           </Typography>
         </Toolbar>
       </AppBar>
@@ -167,4 +167,4 @@ const PersistentDrawerLeft = (props) => {
   );
 };
 
-export default PersistentDrawerLeft;
+export default MainLayout;
