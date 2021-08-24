@@ -22,6 +22,12 @@ const ShackUpdateDialog = ({ onCancelClick, selectedShack, calendarEvent }) => {
     calendarEvent?.start ?? new Date()
   );
   const [endDate, setEndDate] = useState(calendarEvent?.end ?? new Date());
+  const [initialPayment, setInitialPayment] = useState(0);
+  const [name, setName] = useState("");
+  const [lastname, setLastname] = useState("");
+
+  const days = moment(endDate).diff(moment(startDate), "d");
+  const leftPayment = days * selectedShack?.price - initialPayment;
 
   const handleOnStartDateInputChange = (date) => {
     setStartDate(date._d);
@@ -31,24 +37,37 @@ const ShackUpdateDialog = ({ onCancelClick, selectedShack, calendarEvent }) => {
     setEndDate(date._d);
   };
 
-  console.log("calendarEvent :>> ", calendarEvent);
+  const handleOnInitialPaymentChange = (event) => {
+    setInitialPayment(event.target.value);
+  };
+
+  const handleOnNameChange = (event) => {
+    setName(event.target.value);
+  };
+
+  const handleOnLastnameChange = (event) => {
+    setLastname(event.target.value);
+  };
+
   return (
     <MuiPickersUtilsProvider libInstance={moment} utils={MomentUtils}>
       <Dialog open={true} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">Reservar cabaña</DialogTitle>
         <DialogContent>
-          <DialogContentText>
-            Por favor, completa el siguiente formulario para reservar la cabaña
-          </DialogContentText>
-          <FormControl fullWidth variant="outlined" style={{ marginTop: 16 }}>
-            <InputLabel htmlFor="shack-name">Cabaña</InputLabel>
-            <OutlinedInput
-              value={selectedShack?.name}
-              id="shack-name"
-              labelWidth={90}
-            />
-          </FormControl>
-          <Grid item container xs={12} style={{ marginTop: 16 }}>
+          <Grid item container xs={12}>
+            <Grid item xs={6}>
+              <DialogContentText>
+                Cabaña: {selectedShack?.name} - {days} días
+              </DialogContentText>
+            </Grid>
+            <Grid item xs={6}>
+              <DialogContentText align="right" style={{ paddingRight: 5 }}>
+                Precio por día: ${selectedShack?.price}
+              </DialogContentText>
+            </Grid>
+          </Grid>
+
+          <Grid item container xs={12}>
             <Grid item xs={6}>
               <KeyboardDatePicker
                 disableToolbar
@@ -71,6 +90,65 @@ const ShackUpdateDialog = ({ onCancelClick, selectedShack, calendarEvent }) => {
                 value={endDate}
                 onChange={handleOnEndDateInputChange}
               />
+            </Grid>
+          </Grid>
+
+          <FormControl fullWidth variant="outlined" style={{ marginTop: 16 }}>
+            <InputLabel htmlFor="name">Nombre(s)</InputLabel>
+            <OutlinedInput
+              value={name}
+              onChange={handleOnNameChange}
+              id="name"
+              labelWidth={90}
+            />
+          </FormControl>
+
+          <FormControl fullWidth variant="outlined" style={{ marginTop: 16 }}>
+            <InputLabel htmlFor="lastname">Apellidos</InputLabel>
+            <OutlinedInput
+              value={lastname}
+              onChange={handleOnLastnameChange}
+              id="lastname"
+              labelWidth={90}
+            />
+          </FormControl>
+
+          <Grid item container xs={12} style={{ marginTop: 16 }}>
+            <Grid item xs={6}>
+              <FormControl
+                fullWidth
+                variant="outlined"
+                style={{ marginTop: 16, paddingRight: 8 }}
+              >
+                <InputLabel htmlFor="initialPayment">Pago inicial</InputLabel>
+                <OutlinedInput
+                  id="initialPayment"
+                  value={initialPayment}
+                  onChange={handleOnInitialPaymentChange}
+                  startAdornment={
+                    <InputAdornment position="start">$</InputAdornment>
+                  }
+                  labelWidth={90}
+                />
+              </FormControl>
+            </Grid>
+            <Grid item xs={6}>
+              <FormControl
+                fullWidth
+                variant="outlined"
+                style={{ marginTop: 16 }}
+              >
+                <InputLabel htmlFor="leftPayment">Pago restante</InputLabel>
+                <OutlinedInput
+                  value={leftPayment}
+                  readOnly={true}
+                  id="leftPayment"
+                  startAdornment={
+                    <InputAdornment position="start">$</InputAdornment>
+                  }
+                  labelWidth={120}
+                />
+              </FormControl>
             </Grid>
           </Grid>
         </DialogContent>
